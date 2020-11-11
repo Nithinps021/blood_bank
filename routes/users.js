@@ -14,6 +14,8 @@ const USER_DETAILS =
   'SELECT email,gender,"phoneNo" from public."User" WHERE username=$1';
 const BLOOD_DETAILS =
   'SELECT blood,"lastDate" from public."BloodGroups" where username=$1';
+const UPDATE_DETAILS=
+  'UPDATE public."User" SET  email=$1, "phoneNo"=$2 WHERE username=$3'
 
 user.use(express.json());
 
@@ -80,5 +82,16 @@ user.route("/details").post((req, res) => {
   });
 });
 
+
+user.route('/update').post((req,res)=>{
+  const {phoneNo,email,username}=req.body
+  db.query(UPDATE_DETAILS,[email,phoneNo,username])
+  .then((data)=>{
+    return res.status(200).json({updated:true})
+  })
+  .catch(err=>{
+    return res.status(400).json({message:"Something went wrong",updated:false,err})
+  })
+})
 
 module.exports = user;
