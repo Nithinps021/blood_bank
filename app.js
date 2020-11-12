@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors')
 require('dotenv').config()
 
 const db=require('./database/database')
@@ -18,7 +19,7 @@ db.connect()
 .catch((error)=>console.error(error))
 
 
-
+app.use(cors())
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -31,7 +32,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', usersRouter);
 app.use('/request',requesRoute)
-
 
 
 // catch 404 and forward to error handler

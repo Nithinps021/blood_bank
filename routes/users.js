@@ -43,7 +43,7 @@ user.route("/signup").post((req, res) => {
         .json({ username, dob, blood, lastDate, login: true });
     })
     .catch((err) => {
-      return res.status(400).json(err);
+      return res.status(400).json({login:false,err});
     });
 });
 
@@ -91,7 +91,7 @@ user.route("/details").post((req, res) => {
       return res.status(200).json({ ...details, ...data.rows[0] });
     })
     .catch((err) => {
-      return res.status(200).json(err);
+      return res.status(200).json({message:"Someting went wrong",err});
     });
 });
 
