@@ -14,8 +14,8 @@ const USER_DETAILS =
   'SELECT email,gender,"phoneNo" from public."User" WHERE username=$1';
 const BLOOD_DETAILS =
   'SELECT blood,"lastDate" from public."BloodGroups" where username=$1';
-const UPDATE_DETAILS=
-  'UPDATE public."User" SET  email=$1, "phoneNo"=$2 WHERE username=$3'
+const UPDATE_DETAILS =
+  'UPDATE public."User" SET  email=$1, "phoneNo"=$2 WHERE username=$3';
 
 user.use(express.json());
 
@@ -54,7 +54,21 @@ user.route("/login").post((req, res) => {
       if (data.rows.length == 0) {
         throw new Error("Invalid username or password");
       }
-      return res.status(200).json({ username, login: true });
+    })
+    .then(() => {
+      db.query(USER_DETAILS, [username])
+        .then((data) => {
+          details = { ...data.rows[0] };
+        })
+        .then(() => {
+          return db.query(BLOOD_DETAILS, [username]);
+        })
+        .then((data) => {
+          return res.status(200).json({ ...details, ...data.rows[0],username,login:true });
+        })
+        .catch((err) => {
+          return res.status(200).json(err);
+        });
     })
     .catch((err) => {
       if (err.message)
@@ -67,31 +81,31 @@ user.route("/details").post((req, res) => {
   const { username } = req.body;
   let details = {};
   db.query(USER_DETAILS, [username])
-  .then((data) => {
-    details = { ...data.rows[0] };
-    console.log(details)
-  })
-  .then(() => {
-    return db.query(BLOOD_DETAILS, [username]);
-  })
-  .then((data) => {
-    return res.status(200).json({ ...details, ...data.rows[0] });
-  })
-  .catch((err) => {
-    return res.status(200).json(err);
-  });
+    .then((data) => {
+      details = { ...data.rows[0] };
+    })
+    .then(() => {
+      return db.query(BLOOD_DETAILS, [username]);
+    })
+    .then((data) => {
+      return res.status(200).json({ ...details, ...data.rows[0] });
+    })
+    .catch((err) => {
+      return res.status(200).json(err);
+    });
 });
 
-
-user.route('/update').post((req,res)=>{
-  const {phoneNo,email,username}=req.body
-  db.query(UPDATE_DETAILS,[email,phoneNo,username])
-  .then((data)=>{
-    return res.status(200).json({updated:true})
-  })
-  .catch(err=>{
-    return res.status(400).json({message:"Something went wrong",updated:false,err})
-  })
-})
+user.route("/update").post((req, res) => {
+  const { phoneNo, email, username } = req.body;
+  db.query(UPDATE_DETAILS, [email, phoneNo, username])
+    .then((data) => {
+      return res.status(200).json({ updated: true });
+    })
+    .catch((err) => {
+      return res
+        .status(400)
+        .json({ message: "Something went wrong", updated: false, err });
+    });
+});
 
 module.exports = user;
