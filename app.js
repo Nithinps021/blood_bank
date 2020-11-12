@@ -9,6 +9,7 @@ const db=require('./database/database')
 
 
 var usersRouter = require('./routes/users');
+var requesRoute=require('./routes/request')
 
 var app = express();
 
@@ -29,6 +30,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', usersRouter);
+app.use('/request',requesRoute)
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
