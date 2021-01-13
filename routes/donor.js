@@ -10,9 +10,8 @@ const INSERT_WILLING =
   'INSERT INTO public."DonorsWilling"( username, request_id) VALUES ($1,$2);';
 const DELETE_WILLING =
   'DELETE FROM public."DonorsWilling" WHERE username=$1 and request_id=$2;';
-
 const PAST_DONATIONS =
-  'SELECT request_id, blood_group, units, "userId", solved, date_of_request FROM public."BloodRequest" where solved=true and request_id in (select request_id FROM public."DonorsWilling" where username=$1);';
+  'SELECT request_id, blood_group, units, "userId", solved, date_of_request FROM public."BloodRequest" where solved=true and request_id in (select request_id FROM public."DonorsWilling" where username=$1 and selected=true);';
 const donor = express.Router();
 donor.use(express.json());
 
