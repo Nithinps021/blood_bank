@@ -11,6 +11,7 @@ const db=require('./database/database')
 
 var usersRouter = require('./routes/users');
 var requesRoute=require('./routes/request')
+var donor=require('./routes/donor')
 
 var app = express();
 
@@ -32,6 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', usersRouter);
 app.use('/request',requesRoute)
+app.use('/donor',donor)
 
 
 // catch 404 and forward to error handler

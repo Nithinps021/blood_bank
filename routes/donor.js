@@ -7,7 +7,7 @@ const SELECT_REQUEST='SELECT request_id, blood_group, units, "userId", solved, d
 const donor=express.Router()
 donor.use(express.json())
 
-donor.route('/required').post((req,res)=>{
+donor.route('/not_fullfilled').post((req,res)=>{
     const {blood_group}=req.body
     db.query(SELECT_REQUEST,[blood_group])
     .then(data=>{
@@ -18,5 +18,5 @@ donor.route('/required').post((req,res)=>{
     })
 })
 
-
+module.exports=donor
 
