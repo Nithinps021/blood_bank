@@ -5,7 +5,7 @@ const { query } = require("../database/database");
 const db = require("../database/database");
 
 const SELECT_REQUEST =
-  'SELECT request_id, blood_group, units, "userId", solved, date_of_request FROM public."BloodRequest" where blood_group=$1 and request_id not in ( SELECT request_id FROM public."DonorsWilling");';
+  'SELECT request_id, blood_group, units, "userId", solved, date_of_request FROM public."BloodRequest" where blood_group=$1 and solved=false and request_id not in ( SELECT request_id FROM public."DonorsWilling");';
 const INSERT_WILLING =
   'INSERT INTO public."DonorsWilling"( username, request_id) VALUES ($1,$2);';
 const DELETE_WILLING =
@@ -13,6 +13,7 @@ const DELETE_WILLING =
 const PAST_DONATIONS =
   'SELECT request_id, blood_group, units, "userId", solved, date_of_request FROM public."BloodRequest" where solved=true and request_id in (select request_id FROM public."DonorsWilling" where username=$1 and selected=true);';
 const donor = express.Router();
+
 donor.use(express.json());
 
 donor.route("/not_fullfilled").post((req, res) => {
