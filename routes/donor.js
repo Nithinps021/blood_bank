@@ -12,6 +12,8 @@ const DELETE_WILLING =
   'DELETE FROM public."DonorsWilling" WHERE username=$1 and request_id=$2;';
 const PAST_DONATIONS =
   'SELECT request_id, blood_group, units, "userId", solved, date_of_request FROM public."BloodRequest" where solved=true and request_id in (select request_id FROM public."DonorsWilling" where username=$1 and selected=true);';
+const UPCOMMING_DONATIONS=
+'SELECT request_id, blood_group, units, "userId", solved, date_of_request FROM public."BloodRequest" where solved=false and request_id in (select request_id FROM public."DonorsWilling" where username=$1 and selected=true);'
 const donor = express.Router();
 
 donor.use(express.json());
@@ -54,6 +56,17 @@ donor.route("/not_willing").post((req, res) => {
 donor.route("/past_donations").post((req, res) => {
   const { username } = req.body;
   db.query(PAST_DONATIONS, [username])
+    .then((data) => {
+      return res.status(200).json(data.rows);
+    })
+    .catch((err) => {
+      return res.status(400).json({ message: "Someting went wrong", err });
+    });
+});
+
+donor.route("/upcomming_donations").post((req, res) => {
+  const { username } = req.body;
+  db.query(UPCOMMING_DONATIONS, [username])
     .then((data) => {
       return res.status(200).json(data.rows);
     })
