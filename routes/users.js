@@ -40,10 +40,19 @@ user.route("/signup").post((req, res) => {
     .then(() => {
       return res
         .status(200)
-        .json({ username,email,gender,phoneNo, dob, blood, lastDate, login: true });
+        .json({
+          username,
+          dob,
+          email,
+          gender,
+          phoneNo,
+          blood,
+          lastDate,
+          login: true,
+        });
     })
     .catch((err) => {
-      return res.status(400).json({login:false,err});
+      return res.status(400).json({ login: false, err });
     });
 });
 
@@ -64,7 +73,9 @@ user.route("/login").post((req, res) => {
           return db.query(BLOOD_DETAILS, [username]);
         })
         .then((data) => {
-          return res.status(200).json({ ...details, ...data.rows[0],username,login:true });
+          return res
+            .status(200)
+            .json({ ...details, ...data.rows[0], username, login: true });
         })
         .catch((err) => {
           return res.status(200).json(err);
@@ -91,7 +102,7 @@ user.route("/details").post((req, res) => {
       return res.status(200).json({ ...details, ...data.rows[0] });
     })
     .catch((err) => {
-      return res.status(200).json({message:"Someting went wrong",err});
+      return res.status(200).json({ message: "Someting went wrong", err });
     });
 });
 
