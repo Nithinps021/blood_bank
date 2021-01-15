@@ -11,7 +11,7 @@ const INSERT_BLOOD_GROUP =
 const CHECK_USER =
   'SELECT username,password FROM public."Login" WHERE username=$1 and password=$2';
 const USER_DETAILS =
-  'SELECT email,gender,"phoneNo" from public."User" WHERE username=$1';
+  'SELECT dob,email,gender,"phoneNo" from public."User" WHERE username=$1';
 const BLOOD_DETAILS =
   'SELECT blood,"lastDate" from public."BloodGroups" where username=$1';
 const UPDATE_DETAILS =
