@@ -40,7 +40,7 @@ user.route("/signup").post((req, res) => {
     .then(() => {
       return res
         .status(200)
-        .json({ username, dob, blood, lastDate, login: true });
+        .json({ username,email,gender,phoneNo, dob, blood, lastDate, login: true });
     })
     .catch((err) => {
       return res.status(400).json({login:false,err});
